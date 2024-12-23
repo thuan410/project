@@ -19,11 +19,11 @@ spec:
         - containerPort: 5432
         env:
         - name: POSTGRES_USER
-          value: "taikhau"
+          value: "thuan410"
         - name: POSTGRES_PASSWORD
-          value: "123"
+          value: "thuan410"
         - name: POSTGRES_DB
-          value: "nhom1-database"
+          value: "thuan-database"
 
 ---
 
@@ -43,16 +43,16 @@ spec:
     spec:
       containers:
       - name: backend
-        image: qu1et/nhom1-backend:latest
+        image: back_end1:latest
         ports:
         - containerPort: 8080
         env:
         - name: SPRING_DATASOURCE_URL
-          value: "jdbc:postgresql://database:5432/nhom1-database"
+          value: "jdbc:postgresql://database:5432/thuan-database"
         - name: SPRING_DATASOURCE_USERNAME
-          value: "taikhau"
+          value: "thuan410"
         - name: SPRING_DATASOURCE_PASSWORD
-          value: "123"
+          value: "thuan410"
 
 ---
 
@@ -72,6 +72,6 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: qu1et/nhom1-frontend:latest
+        image: front_end1:latest
         ports:
         - containerPort: 9090

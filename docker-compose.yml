@@ -4,28 +4,28 @@ services:
     image: postgres:15 # Sử dụng image PostgreSQL chính thức
     container_name: database
     environment:
-      POSTGRES_USER: taikhau
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: nhom1-database
+      POSTGRES_USER: thuan410
+      POSTGRES_PASSWORD: thuan410
+      POSTGRES_DB: thuan-database
     ports:
       - "5432:5432" # Ánh xạ cổng 5432 của container sang cổng 5432 của host
     volumes:
       - db_data:/var/lib/postgresql/data # Lưu trữ dữ liệu bên ngoài container để đảm bảo dữ liệu không mất đi khi container bị xóa
 
   backend:
-    image: qu1et/nhom1-backend:latest
+    image: back_end1:latest
     container_name: backend
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/nhom1-database
-      SPRING_DATASOURCE_USERNAME: taikhau
-      SPRING_DATASOURCE_PASSWORD: 123
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/thuan-database
+      SPRING_DATASOURCE_USERNAME: thuan410
+      SPRING_DATASOURCE_PASSWORD: thuan410
     depends_on:
       - database
     ports:
       - "8080:8080"
 
   frontend:
-    image: qu1et/nhom1-frontend:latest
+    image: front_end1:latest
     container_name: frontend
     ports:
       - "10000:9090"
