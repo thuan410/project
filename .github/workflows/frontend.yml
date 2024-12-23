@@ -1,0 +1,82 @@
+name: Build, Test, and Analyze Backend with SonarQube
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - frontend/**
+
+jobs:
+  build:
+    runs-on: [self-hosted, frontend-runner]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v1
+        with:
+          java-version: 17
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+       # Frontend Build and Analysis
+      - name: Make gradlew executable for Frontend
+        run: chmod +x frontend/gradlew
+
+      # Build frontend
+      - name: Build Frontend
+        run: |
+          cd frontend
+          ./gradlew clean build
+
+      # Run tests for frontend
+      - name: Run Frontend Tests
+        run: |
+          cd frontend
+          ./gradlew test
+
+      # Run SonarQube analysis
+      - name: SonarQube Analysis
+        run: |
+          cd frontend
+          ./gradlew sonar --info
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      
+      # Build and push frontend image
+      - name: Build and Push Frontend Image
+        run: |
+          docker build -t nhom1-frontend ./frontend
+          docker tag nhom1-frontend qu1et/nhom1-frontend:latest
+          docker login -u ${{ secrets.Dockerhub_username }} -p ${{ secrets.Dockerhub_token }}
+          docker push qu1et/nhom1-frontend:latest
+
+  deploy:
+    name: Deploy Application
+    needs: build
+    runs-on: [self-hosted, frontend-runner]
+    steps:
+      # Xóa các container/dịch vụ hiện có
+      - name: Remove Existing Containers
+        run: docker-compose down
+
+      # Pull Docker images
+      - name: Pull Docker Images
+        run: |
+          docker pull qu1et/nhom1-frontend:latest
+
+      - name: Image scan
+        run: |
+          trivy image qu1et/nhom1-frontend:latest > trivyimagedeployfrontend.txt
+
+      - name: Deploy with Docker Compose
+        run: docker-compose up -d frontend
+        

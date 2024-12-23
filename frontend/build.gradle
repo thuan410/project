@@ -1,0 +1,43 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.4.0'
+	id 'io.spring.dependency-management' version '1.1.6'
+	id "org.sonarqube" version "4.3.0.3225"
+}
+
+sonar {
+  properties {
+	property "sonar.projectName", "frontend"
+    property "sonar.projectKey", "doan-nhom1"
+	property "sonar.host.url", "http://54.172.124.101:9000"
+    property "sonar.login", System.getenv("SONAR_TOKEN") // Lấy token từ environment
+    property "sonar.sources", "src/main/java" // Chỉ định thư mục chứa mã nguồn
+    property "sonar.java.binaries", "$buildDir/classes/java/main" // Chỉ định thư mục chứa tệp .class
+  }
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+	implementation 'org.springframework.boot:spring-boot-starter'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
