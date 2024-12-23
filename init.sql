@@ -7,5 +7,5 @@ CREATE TABLE nhom1table (
 );
 
 INSERT INTO nhom1table (username, email, password) VALUES
-('taikhau', thkinh3009@gmail.com, 123),
-('thinhdinh', lekhauhuutai48@gmail.com, 456);
+('thuan', tvt04102004@gmail.com, 410),
+('thuan1', tranvanthuan04102004@gmail.com, 410);
