@@ -8,7 +8,7 @@ plugins {
 sonar {
   properties {
     property "sonar.projectName", "spring_api"
-    property "sonar.projectKey", "doan-nhom1"
+    property "sonar.projectKey", "thuan"
     property "sonar.host.url", "http://54.172.124.101:9000"
     property "sonar.login", System.getenv("SONAR_TOKEN") // Lấy token từ environment
     property "sonar.sources", "src/main/java" // Chỉ định thư mục chứa mã nguồn
